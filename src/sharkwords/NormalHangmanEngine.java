@@ -51,10 +51,10 @@ class NormalHangmanEngine extends sharkwords.HangmanEngine {
     /**
      * Check if guess is correct.
      * <p>
-     * This is a trivial check in friendly hangman, but having this as
-     * a separate method makes it easier to subclass this for different variants
-     * that might change the answer-word in response to the guess (like the
-     * evil variant does).
+     * This is a trivial check in friendly hangman, but having this as a
+     * separate method makes it easier to subclass this for different variants
+     * that might change the answer-word in response to the guess (like the evil
+     * variant does).
      *
      * @param guess Guessed letter
      * @return true if guess is correct else false

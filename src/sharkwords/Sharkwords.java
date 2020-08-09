@@ -4,9 +4,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 
 
 /**
@@ -100,9 +98,9 @@ class ImagePanel extends JPanel {
     }
 
     void setImage(int number) {
+        String path = "/guess" + number + ".png";
         try {
-            image = ImageIO.read(getClass().getResourceAsStream("/guess" + number + ".png"));
-//            image = ImageIO.read(new File("guess" + number + ".png"));
+            image = ImageIO.read(getClass().getResourceAsStream(path));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -112,9 +110,8 @@ class ImagePanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(image, 0, 0, this); // see javadoc for more info on the parameters
+        g.drawImage(image, 0, 0, this);
     }
-
 }
 
 

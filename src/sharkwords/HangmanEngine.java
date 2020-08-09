@@ -3,7 +3,6 @@ package sharkwords;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -57,10 +56,9 @@ abstract class HangmanEngine {
                 return item;
 
         // This is thrown if an empty list is provided. It's required because
-        // otherwise the compiler rejects this because it can't prove the
-        // method has a guaranteed exit point.
-
-        throw new AssertionError();
+        // otherwise the compiler rejects this because it can't prove the method
+        // has a guaranteed exit point.
+        throw new AssertionError("Empty collection supplied.");
     }
 }
 

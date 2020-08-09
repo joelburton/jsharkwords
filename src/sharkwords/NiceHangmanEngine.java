@@ -1,6 +1,5 @@
 package sharkwords;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -13,8 +12,8 @@ class NiceHangmanEngine extends sharkwords.EvilHangmanEngine {
     /**
      * Check if guess is correct, but first update candidate words.
      * <p>
-     * Like evil hangman's version, but uses the shortest family list ---
-     * so it always zooms reduces the guesses as much as possible.
+     * Like evil hangman's version, but uses the shortest family list --- so it
+     * always zooms reduces the guesses as much as possible.
      *
      * @param guess Guessed letter
      * @return is this letter correct?
@@ -24,8 +23,8 @@ class NiceHangmanEngine extends sharkwords.EvilHangmanEngine {
     boolean isGuessCorrect(String guess) {
         var families = constructFamilies(guess).values();
 
-        // find the family with the shortest list of words; in the
-        // example above, that would be [dog, pup, cur]
+        // find the family with the shortest list of words; in the example
+        // above, that would be [dog, pup, cur]
         candidateAnswers = Collections.min(
                 families,
                 Comparator.comparingInt(List::size));

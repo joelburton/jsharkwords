@@ -3,9 +3,7 @@ package sharkwords;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * Evil hangman: tries to make the game as difficult as possible.
- */
+/** Evil hangman: tries to make the game as difficult as possible. */
 
 class EvilHangmanEngine extends sharkwords.NormalHangmanEngine {
     List<String> candidateAnswers;

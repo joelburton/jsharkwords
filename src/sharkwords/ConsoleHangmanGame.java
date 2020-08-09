@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-/**
- * Hangman game.
- */
+/** Hangman game. */
 
 public class ConsoleHangmanGame {
     private final sharkwords.HangmanEngine engine;
@@ -15,9 +13,7 @@ public class ConsoleHangmanGame {
         this.engine = engine;
     }
 
-    /**
-     * Show game status
-     */
+    /** Show game status */
 
     private void showStatus() {
         System.out.printf("Number guesses left: %s%n", engine.nGuessesLeft);
@@ -25,9 +21,7 @@ public class ConsoleHangmanGame {
         System.out.printf("%n%s%n", engine.guessedWord());
     }
 
-    /**
-     * Main game round control
-     */
+    /** Main game round control */
 
     private void playRound() {
         Scanner terminalInput = new Scanner(System.in);
@@ -61,9 +55,7 @@ public class ConsoleHangmanGame {
         }
     }
 
-    /**
-     * Command-line interface
-     */
+    /** Command-line interface */
 
     public static void main(String[] args) throws IOException {
 

@@ -4,9 +4,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * Nice engine: try to winnow candidates as quickly as possible.
- */
+/** Nice engine: try to winnow candidates as quickly as possible. */
 
 class NiceHangmanEngine extends sharkwords.EvilHangmanEngine {
     /**

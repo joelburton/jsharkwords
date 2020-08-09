@@ -3,41 +3,40 @@ package sharkwords;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.HashMap;
 
 
-/**
- * Button for each engine, so player can pick one.
- */
-
-class EngineButton extends JButton {
-    EngineButton(String label,
-                 Class<? extends sharkwords.HangmanEngine> engineClass,
-                 EngineChooserFrame engineChooserFrame) {
-        super(label);
-        addActionListener(e -> engineChooserFrame.chooseEngine(engineClass));
-    }
-
-}
-
-
-/**
- * Starting panel: lets a player pick a engine.
- */
+/** Starting panel: lets a player pick a engine. */
 
 class EngineChooserFrame extends JFrame {
+
+    /** Button for each engine, so player can pick one. */
+
+    static class EngineButton extends JButton {
+        EngineButton(String label,
+                     Class<? extends sharkwords.HangmanEngine> engineClass,
+                     EngineChooserFrame engineChooserFrame) {
+            super(label);
+            addActionListener(e -> engineChooserFrame.chooseEngine(engineClass));
+        }
+    }
+
     EngineChooserFrame() {
         JPanel engines = new JPanel();
 
         engines.add(new EngineButton(
-                "Normal", sharkwords.NormalHangmanEngine.class, this));
+                "Normal", NormalHangmanEngine.class, this));
         engines.add(new EngineButton(
-                "Evil", sharkwords.EvilHangmanEngine.class, this));
+                "Evil", EvilHangmanEngine.class, this));
         engines.add(new EngineButton(
-                "Nice", sharkwords.NiceHangmanEngine.class, this));
+                "Nice", NiceHangmanEngine.class, this));
         engines.add(new EngineButton(
-                "Nicely-Evil", sharkwords.NicelyEvilHangmanEngine.class, this));
+                "Nicely-Evil", NicelyEvilHangmanEngine.class, this));
 
         setLayout(new GridLayout(2, 1));
         add(new JLabel(
@@ -54,41 +53,51 @@ class EngineChooserFrame extends JFrame {
     }
 }
 
-
-/**
- * Single letter button in game.
- */
-
-class LetterButton extends JButton {
-    LetterButton(String label, SharkwordsGameFrame frame) {
-        super(label);
-        setMargin(new Insets(0, 0, 0, 0));
-        setPreferredSize(new Dimension(30, 30));
-        addActionListener(e -> {
-            setEnabled(false);
-            frame.guess(label);
-        });
-
-    }
-}
-
-
-/**
- * All letter buttons.
- */
+/** All letter buttons. */
 
 class LetterButtons extends JPanel {
+
+    /** Single letter button in game. */
+
+    static class LetterButton extends JButton {
+        LetterButton(String label, SharkwordsGameFrame frame) {
+            super(label);
+            setMargin(new Insets(0, 0, 0, 0));
+            setPreferredSize(new Dimension(30, 30));
+            addActionListener(e -> {
+                frame.guess(label);
+            });
+        }
+    }
+
+    /* Keyboard listener so user can type guesses. */
+
+    class SharkKeyListener extends KeyAdapter {
+        @Override
+        public void keyTyped(KeyEvent e) {
+            frame.guess(String.valueOf(e.getKeyChar()));
+        }
+    }
+
+    SharkwordsGameFrame frame;
+    HashMap<String, LetterButton> keyMap = new HashMap<>();
+
     LetterButtons(SharkwordsGameFrame frame) {
         for (String btn : "abcdefghijklmnopqrstuvwxyz".split("")) {
-            add(new LetterButton(btn, frame));
+            var button = new LetterButton(btn, frame);
+            add(button);
+            keyMap.put(btn, button);
         }
+
+        this.frame = frame;
+        addKeyListener(new SharkKeyListener());
+        setFocusable(true);
+        setFocusTraversalKeysEnabled(false);
     }
 }
 
 
-/**
- * Image for current number of guesses.
- */
+/** Image for current number of guesses. */
 
 class ImagePanel extends JPanel {
     private BufferedImage image;
@@ -115,9 +124,7 @@ class ImagePanel extends JPanel {
 }
 
 
-/**
- * Panel for a game: handles all in-game UI.
- */
+/** Panel for a game: handles all in-game UI. */
 
 class SharkwordsGameFrame extends JFrame {
     private ImagePanel image;
@@ -142,41 +149,60 @@ class SharkwordsGameFrame extends JFrame {
         }
 
         image = new ImagePanel();
-        guessedWord = new JLabel(engine.guessedWord(), SwingConstants.CENTER);
-        guessesLeft = new JLabel("Guesses left", SwingConstants.CENTER);
+
+        JPanel guessesArea = new JPanel();
+        guessedWord = new JLabel(formatGuessWord(), SwingConstants.CENTER);
+        guessesLeft = new JLabel(
+                "Guesses left: " + engine.nGuessesLeft,
+                SwingConstants.CENTER);
+        guessesArea.add(guessedWord);
+        guessesArea.add(guessesLeft);
+        guessesArea.setLayout(new GridLayout(2, 1));
+
         letters = new LetterButtons(this);
 
-        setLayout(new GridLayout(4, 1));
+        setResizable(false);
+        setLayout(new GridLayout(3, 1));
         setSize(300, 500);
-
         add(image);
-        add(guessedWord);
-        add(guessesLeft);
+        add(guessesArea);
         add(letters);
-
+        setTitle("Sharkwords!");
         setVisible(true);
     }
 
+    /** Display guessed word has spaces between each letter. */
+
+    String formatGuessWord() {
+        return String.join(" ", engine.guessedWord().split(""));
+    }
+
     void guess(String letter) {
+        if (letters.keyMap.containsKey(letter))
+            letters.keyMap.get(letter).setEnabled(false);
+
         boolean result = engine.guess(letter);
         if (!result) {
             image.setImage(HangmanEngine.MAX_GUESSES - engine.nGuessesLeft);
             guessesLeft.setText("Guesses left: " + engine.nGuessesLeft);
         } else {
-            guessedWord.setText(engine.guessedWord());
+            guessedWord.setText(formatGuessWord());
         }
 
-        if (engine.nGuessesLeft == 0) {
+        if (engine.gameState == GameState.Lost) {
             guessedWord.setText(engine.answer);
+            letters.setVisible(false);
+        }
+
+        if (engine.gameState == GameState.Won) {
+            guessedWord.setText("Correct: " + engine.answer);
             letters.setVisible(false);
         }
     }
 }
 
 
-/**
- * Start: make and show the engine chooser.
- */
+/** Start: make and show the engine chooser. */
 
 public class Sharkwords {
     public static void main(String[] args) {

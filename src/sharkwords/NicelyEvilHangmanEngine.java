@@ -3,9 +3,7 @@ package sharkwords;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Nicely evil: keep their options open, but try to use their letter.
- */
+/** Nicely evil: keep their options open, but try to use their letter. */
 
 class NicelyEvilHangmanEngine extends sharkwords.EvilHangmanEngine {
     @Override

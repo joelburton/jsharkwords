@@ -10,9 +10,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/**
- * Hangman game engine for normal game.
- */
+/** Hangman game engine for normal game. */
 
 class NormalHangmanEngine extends sharkwords.HangmanEngine {
 
@@ -88,9 +86,7 @@ class NormalHangmanEngine extends sharkwords.HangmanEngine {
         return correct;
     }
 
-    /**
-     * Return displayable guessed word (eg "a__le")
-     */
+    /** Return displayable guessed word (eg "a__le") */
 
     String guessedWord() {
         return Arrays.stream(answer.split(""))

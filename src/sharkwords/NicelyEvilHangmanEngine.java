@@ -13,12 +13,9 @@ class NicelyEvilHangmanEngine extends sharkwords.EvilHangmanEngine {
         Map<String, List<String>> families = super.constructFamilies(guess);
 
         // remove families that don't use guessed letter if possible.
-
         if (families.size() > 1) {
-            StringBuilder key = new StringBuilder();
-            for (int i = 0; i < answer.length(); i++)
-                key.append("-");
-            families.remove(key.toString());
+            String guessNotUsedKey = "-".repeat(answer.length());
+            families.remove(guessNotUsedKey);
         }
 
         return families;

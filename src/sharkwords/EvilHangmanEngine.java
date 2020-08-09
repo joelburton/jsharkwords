@@ -1,6 +1,8 @@
 package sharkwords;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Evil hangman: tries to make the game as difficult as possible.
@@ -24,10 +26,9 @@ class EvilHangmanEngine extends sharkwords.NormalHangmanEngine {
     String chooseAnswer() {
         String answer = super.chooseAnswer();
 
-        candidateAnswers = new ArrayList<>();
-        for (String w : vocab)
-            if (w.length() == answer.length())
-                candidateAnswers.add(w);
+        candidateAnswers = vocab.stream()
+                .filter(w -> w.length() == answer.length())
+                .collect(Collectors.toList());
 
         return answer;
     }
@@ -45,14 +46,12 @@ class EvilHangmanEngine extends sharkwords.NormalHangmanEngine {
     Map<String, List<String>> constructFamilies(String guess) {
         Map<String, List<String>> families = new HashMap<>();
 
-
         for (String word : candidateAnswers) {
-            StringBuilder key = new StringBuilder();
-            for (String c : word.split(""))
-                key.append(Objects.equals(c, guess) ? c : "-");
+            String key = Arrays.stream(word.split(""))
+                    .map(c -> Objects.equals(c, guess) ? c : "-")
+                    .collect(Collectors.joining());
             logger.fine("word=" + word + " key=" + key);
-            families.putIfAbsent(key.toString(), new ArrayList<>());
-            families.get(key.toString()).add(word);
+            families.getOrDefault(key, new ArrayList<>()).add(word);
         }
         return families;
     }

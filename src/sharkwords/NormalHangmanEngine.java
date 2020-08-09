@@ -3,6 +3,7 @@ package sharkwords;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
@@ -22,9 +23,10 @@ class NormalHangmanEngine extends sharkwords.HangmanEngine {
         Pattern legal = Pattern.compile("^[a-z]{" + lenRange + "}$");
 
         try (Stream<String> words = Files.lines(Paths.get(DICT_PATH))) {
-            vocab = words
+            var vocabList = words
                     .filter(line -> legal.matcher(line).matches())
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toUnmodifiableList());
+            vocab = new ArrayList<>(vocabList);
         }
 
         logger.info("vocab=" + vocab.size());
@@ -91,12 +93,8 @@ class NormalHangmanEngine extends sharkwords.HangmanEngine {
      */
 
     String guessedWord() {
-        StringBuilder out = new StringBuilder();
-
-        for (String letter : answer.split("")) {
-            out.append(guessed.contains(letter) ? letter : "_");
-        }
-
-        return out.toString();
+        return Arrays.stream(answer.split(""))
+                .map(letter -> guessed.contains(letter) ? letter : "_")
+                .collect(Collectors.joining());
     }
 }

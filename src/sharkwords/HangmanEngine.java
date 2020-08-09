@@ -1,6 +1,7 @@
 package sharkwords;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -24,7 +25,7 @@ abstract class HangmanEngine {
 
     Logger logger = Logger.getLogger("com.joelburton.HangmanEngine");
 
-    List<String> vocab;
+    ArrayList<String> vocab;
     String answer;
     Set<String> guessed;
     int nGuessesLeft = MAX_GUESSES;

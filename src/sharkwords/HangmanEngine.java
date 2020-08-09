@@ -22,7 +22,7 @@ abstract class HangmanEngine {
     static int MIN_WORD_LENGTH = 4;
     static int MAX_WORD_LENGTH = 10;
 
-    Logger logger = Logger.getLogger("com.joelburton.HangmanEngine");
+    final Logger logger = Logger.getLogger("com.joelburton.HangmanEngine");
 
     ArrayList<String> vocab;
     String answer;

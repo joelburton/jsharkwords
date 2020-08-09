@@ -1,32 +1,45 @@
+package sharkwords;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+
+
+/**
+ * Button for each engine, so player can pick one.
+ */
 
 class EngineButton extends JButton {
     EngineButton(String label,
-                 Class<? extends HangmanEngine> engineClass,
-                 EngineChooser engineChooser) {
+                 Class<? extends sharkwords.HangmanEngine> engineClass,
+                 EngineChooserFrame engineChooserFrame) {
         super(label);
-        addActionListener(e -> engineChooser.chooseEngine(engineClass));
+        addActionListener(e -> engineChooserFrame.chooseEngine(engineClass));
     }
 
 }
 
-class EngineChooser extends JFrame {
-    EngineChooser() {
+
+/**
+ * Starting panel: lets a player pick a engine.
+ */
+
+class EngineChooserFrame extends JFrame {
+    EngineChooserFrame() {
         JPanel engines = new JPanel();
 
         engines.add(new EngineButton(
-                "Normal", NormalHangmanEngine.class, this));
+                "Normal", sharkwords.NormalHangmanEngine.class, this));
         engines.add(new EngineButton(
-                "Evil", EvilHangmanEngine.class, this));
+                "Evil", sharkwords.EvilHangmanEngine.class, this));
         engines.add(new EngineButton(
-                "Nice", NiceHangmanEngine.class, this));
+                "Nice", sharkwords.NiceHangmanEngine.class, this));
         engines.add(new EngineButton(
-                "Nicely-Evil", NicelyEvilHangmanEngine.class, this));
+                "Nicely-Evil", sharkwords.NicelyEvilHangmanEngine.class, this));
 
         setLayout(new GridLayout(2, 1));
         add(new JLabel(
@@ -37,25 +50,37 @@ class EngineChooser extends JFrame {
         setSize(425, 125);
     }
 
-    void chooseEngine(Class<? extends HangmanEngine> engineClass) {
+    void chooseEngine(Class<? extends sharkwords.HangmanEngine> engineClass) {
         System.out.printf("%s%n", engineClass);
-        setVisible(false);
-        new SharkwordsFrame(engineClass);
+        new SharkwordsGameFrame(engineClass);
     }
 }
 
+
+/**
+ * Single letter button in game.
+ */
+
 class LetterButton extends JButton {
-    LetterButton(String label, SharkwordsFrame frame) {
+    LetterButton(String label, SharkwordsGameFrame frame) {
         super(label);
         setMargin(new Insets(0, 0, 0, 0));
         setPreferredSize(new Dimension(30, 30));
-        addActionListener(e -> { setEnabled(false); frame.guess(label); });
+        addActionListener(e -> {
+            setEnabled(false);
+            frame.guess(label);
+        });
 
     }
 }
 
+
+/**
+ * All letter buttons.
+ */
+
 class LetterButtons extends JPanel {
-    LetterButtons(SharkwordsFrame frame) {
+    LetterButtons(SharkwordsGameFrame frame) {
         for (String btn : "abcdefghijklmnopqrstuvwxyz".split("")) {
             add(new LetterButton(btn, frame));
         }
@@ -63,7 +88,11 @@ class LetterButtons extends JPanel {
 }
 
 
-class ImagePanel extends JPanel{
+/**
+ * Image for current number of guesses.
+ */
+
+class ImagePanel extends JPanel {
     private BufferedImage image;
 
     ImagePanel() {
@@ -72,7 +101,8 @@ class ImagePanel extends JPanel{
 
     void setImage(int number) {
         try {
-            image = ImageIO.read(new File("guess" + number + ".png"));
+            image = ImageIO.read(getClass().getResourceAsStream("/guess" + number + ".png"));
+//            image = ImageIO.read(new File("guess" + number + ".png"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -87,17 +117,22 @@ class ImagePanel extends JPanel{
 
 }
 
-class SharkwordsFrame extends JFrame {
+
+/**
+ * Panel for a game: handles all in-game UI.
+ */
+
+class SharkwordsGameFrame extends JFrame {
     private ImagePanel image;
     private JLabel guessedWord;
     private JLabel guessesLeft;
+    private sharkwords.HangmanEngine engine;
     private LetterButtons letters;
-    private HangmanEngine engine;
 
-    SharkwordsFrame(Class<? extends HangmanEngine> engineClass) {
+    SharkwordsGameFrame(Class<? extends sharkwords.HangmanEngine> engineClass) {
         try {
-            engine = engineClass.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
+            engine = engineClass.getDeclaredConstructor().newInstance();
+        } catch (ReflectiveOperationException e) {
             e.printStackTrace();
             return;
         }
@@ -122,25 +157,34 @@ class SharkwordsFrame extends JFrame {
         add(guessesLeft);
         add(letters);
 
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
     }
 
     void guess(String letter) {
         boolean result = engine.guess(letter);
         if (!result) {
-            image.setImage(5 - engine.nGuessesLeft);
+            image.setImage(HangmanEngine.MAX_GUESSES - engine.nGuessesLeft);
             guessesLeft.setText("Guesses left: " + engine.nGuessesLeft);
         } else {
             guessedWord.setText(engine.guessedWord());
         }
+
+        if (engine.nGuessesLeft == 0) {
+            guessedWord.setText(engine.answer);
+            letters.setVisible(false);
+        }
     }
 }
 
+
+/**
+ * Start: make and show the engine chooser.
+ */
+
 public class Sharkwords {
     public static void main(String[] args) {
-        EngineChooser engineChooser = new EngineChooser();
-        engineChooser.setVisible(true);
-        engineChooser.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        EngineChooserFrame engineChooserFrame = new EngineChooserFrame();
+        engineChooserFrame.setVisible(true);
+        engineChooserFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 }

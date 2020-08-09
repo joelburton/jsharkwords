@@ -1,11 +1,13 @@
+package sharkwords;
+
 import java.util.List;
 import java.util.Map;
 
 /**
- * Micely evil: keep their options open, but try to use their letter.
+ * Nicely evil: keep their options open, but try to use their letter.
  */
 
-class NicelyEvilHangmanEngine extends EvilHangmanEngine {
+class NicelyEvilHangmanEngine extends sharkwords.EvilHangmanEngine {
     @Override
     Map<String, List<String>> constructFamilies(String guess) {
         Map<String, List<String>> families = super.constructFamilies(guess);
@@ -13,10 +15,10 @@ class NicelyEvilHangmanEngine extends EvilHangmanEngine {
         // remove families that don't use guessed letter if possible.
 
         if (families.size() > 1) {
-            String key = "";
+            StringBuilder key = new StringBuilder();
             for (int i = 0; i < answer.length(); i++)
-                key += "-";
-            families.remove(key);
+                key.append("-");
+            families.remove(key.toString());
         }
 
         return families;

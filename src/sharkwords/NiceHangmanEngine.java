@@ -1,3 +1,5 @@
+package sharkwords;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -7,7 +9,7 @@ import java.util.List;
  * Nice engine: try to winnow candidates as quickly as possible.
  */
 
-class NiceHangmanEngine extends EvilHangmanEngine {
+class NiceHangmanEngine extends sharkwords.EvilHangmanEngine {
     /**
      * Check if guess is correct, but first update candidate words.
      * <p>

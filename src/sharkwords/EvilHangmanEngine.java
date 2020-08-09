@@ -1,6 +1,12 @@
+package sharkwords;
+
 import java.util.*;
 
-class EvilHangmanEngine extends NormalHangmanEngine {
+/**
+ * Evil hangman: tries to make the game as difficult as possible.
+ */
+
+class EvilHangmanEngine extends sharkwords.NormalHangmanEngine {
     List<String> candidateAnswers;
 
     /**
@@ -41,12 +47,12 @@ class EvilHangmanEngine extends NormalHangmanEngine {
 
 
         for (String word : candidateAnswers) {
-            String key = "";
+            StringBuilder key = new StringBuilder();
             for (String c : word.split(""))
-                key += Objects.equals(c, guess) ? c : "-";
+                key.append(Objects.equals(c, guess) ? c : "-");
             logger.fine("word=" + word + " key=" + key);
-            families.putIfAbsent(key, new ArrayList<>());
-            families.get(key).add(word);
+            families.putIfAbsent(key.toString(), new ArrayList<>());
+            families.get(key.toString()).add(word);
         }
         return families;
     }
@@ -69,15 +75,17 @@ class EvilHangmanEngine extends NormalHangmanEngine {
 
     @Override
     boolean isGuessCorrect(String guess) {
-        Collection<List<String>> families = (constructFamilies(guess)).values();
+        Collection<List<String>> families = constructFamilies(guess).values();
 
         // find the family with the longest list of words; in the
         // example above, that would be [dog, pup, cur]
-        candidateAnswers = Collections.max(families, Comparator.comparingInt(List::size));
+        candidateAnswers = Collections.max(
+                families,
+                Comparator.comparingInt(List::size));
 
-        // choose a provisional answer from this; this is only needed in
-        // case the hangman program in general wants to print the answer
-        // out for users, etc
+        // choose a provisional answer from this; this is only needed in case
+        // the hangman program in general wants to print the answer out for
+        // users, etc
         answer = choice(candidateAnswers);
         logger.fine("answer=" + answer);
 

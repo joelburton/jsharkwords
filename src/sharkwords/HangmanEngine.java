@@ -1,16 +1,24 @@
+package sharkwords;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
+
+/** Current state of game, maintained by all engines. */
+
 enum GameState {
     Won, Lost, Active
 }
 
+
+/** Abstract engine that all hangman engines must extend. */
+
 abstract class HangmanEngine {
     static String DICT_PATH = "/usr/share/dict/words";
-    private static int MAX_GUESSES = 5;
+    static final int MAX_GUESSES = 5;
     static int MIN_WORD_LENGTH = 4;
     static int MAX_WORD_LENGTH = 10;
 

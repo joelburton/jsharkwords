@@ -1,3 +1,4 @@
 Manifest-Version: 1.0
-Main-Class: Sharkwords
+Main-Class: sharkwords.Sharkwords
 SplashScreen-Image: guess5.png
+Specification-Version: 1.1

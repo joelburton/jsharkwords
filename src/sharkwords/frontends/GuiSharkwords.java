@@ -1,7 +1,7 @@
 package sharkwords.frontends;
 
 import sharkwords.*;
-import sharkwords.AbstractHangmanEngine.GameState;
+import sharkwords.engines.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -21,7 +21,7 @@ class EngineChooserFrame extends JFrame {
 
     static class EngineButton extends JButton {
         EngineButton(String label,
-                     Class<? extends AbstractHangmanEngine> engineClass,
+                     Class<? extends AbstractEngine> engineClass,
                      EngineChooserFrame engineChooserFrame) {
             super(label);
             addActionListener(e -> engineChooserFrame.chooseEngine(engineClass));
@@ -32,13 +32,15 @@ class EngineChooserFrame extends JFrame {
         JPanel engines = new JPanel();
 
         engines.add(new EngineButton(
-                "Normal", NormalHangmanEngine.class, this));
+                "Boring", BoringEngine.class, this));
         engines.add(new EngineButton(
-                "Evil", EvilHangmanEngine.class, this));
+                "Normal", NormalEngine.class, this));
         engines.add(new EngineButton(
-                "Nice", NiceHangmanEngine.class, this));
+                "Evil", EvilEngine.class, this));
         engines.add(new EngineButton(
-                "Nicely-Evil", NicelyEvilHangmanEngine.class, this));
+                "Nice", NiceEngine.class, this));
+        engines.add(new EngineButton(
+                "Nicely-Evil", NicelyEvilEngine.class, this));
 
         setLayout(new GridLayout(2, 1));
         add(new JLabel(
@@ -49,7 +51,7 @@ class EngineChooserFrame extends JFrame {
         setSize(500, 125);
     }
 
-    void chooseEngine(Class<? extends AbstractHangmanEngine> engineClass) {
+    void chooseEngine(Class<? extends AbstractEngine> engineClass) {
         System.out.printf("%s%n", engineClass);
         new SharkwordsGameFrame(engineClass);
     }
@@ -130,10 +132,10 @@ class SharkwordsGameFrame extends JFrame {
     private ImagePanel image;
     private JLabel guessedWord;
     private JLabel guessesLeft;
-    private AbstractHangmanEngine engine;
+    private AbstractEngine engine;
     private LetterButtons letters;
 
-    SharkwordsGameFrame(Class<? extends AbstractHangmanEngine> engineClass) {
+    SharkwordsGameFrame(Class<? extends AbstractEngine> engineClass) {
         try {
             engine = engineClass.getDeclaredConstructor().newInstance();
         } catch (ReflectiveOperationException e) {
@@ -183,7 +185,7 @@ class SharkwordsGameFrame extends JFrame {
 
         boolean result = engine.guess(letter);
         if (!result) {
-            image.setImage(NormalHangmanEngine.maxGuesses - engine.nGuessesLeft);
+            image.setImage(NormalEngine.maxGuesses - engine.nGuessesLeft);
             guessesLeft.setText("Guesses left: " + engine.nGuessesLeft);
         } else {
             guessedWord.setText(formatGuessWord());
@@ -204,7 +206,7 @@ class SharkwordsGameFrame extends JFrame {
 
 /** Start: make and show the engine chooser. */
 
-public class Sharkwords {
+public class GuiSharkwords {
     public static void main(String[] args) {
         EngineChooserFrame engineChooserFrame = new EngineChooserFrame();
         engineChooserFrame.setVisible(true);

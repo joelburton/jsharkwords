@@ -1,4 +1,4 @@
-package sharkwords;
+package sharkwords.engines;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -9,7 +9,7 @@ import static choice.Choice.choice;
 
 /** Nice engine: try to winnow candidates as quickly as possible. */
 
-public class NiceHangmanEngine extends EvilHangmanEngine {
+public class NiceEngine extends EvilEngine {
     final private Logger logger = Logger.getLogger("NormalHangmanEngine");
 
     /**

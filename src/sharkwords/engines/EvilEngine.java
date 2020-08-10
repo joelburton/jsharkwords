@@ -1,4 +1,4 @@
-package sharkwords;
+package sharkwords.engines;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -8,7 +8,7 @@ import static choice.Choice.choice;
 
 /** Evil hangman: tries to make the game as difficult as possible. */
 
-public class EvilHangmanEngine extends NormalHangmanEngine {
+public class EvilEngine extends NormalEngine {
     final private Logger logger = Logger.getLogger("EvilHangmanEngine");
 
     List<String> candidateAnswers;

@@ -1,4 +1,6 @@
-package sharkwords;
+package sharkwords.engines;
+
+import sharkwords.GameState;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,14 +10,11 @@ import java.util.Set;
 /** Abstract engine that all hangman engines must extend. */
 
 @SuppressWarnings("unused")
-public abstract class AbstractHangmanEngine {
+public abstract class AbstractEngine {
 
-    /** Current state of game, maintained by all engines. */
+    /** The name of the engine. */
 
-    public enum GameState {
-        Won, Lost, Active
-    }
-
+    protected static String engineName;
 
     /**
      * The list of words in the game vocabulary.
@@ -55,6 +54,8 @@ public abstract class AbstractHangmanEngine {
 
     /**
      * Choose the secret answer using any method the engine chooses.
+     *
+     * @return Answer word.
      */
 
     public abstract String chooseAnswer();

@@ -1,4 +1,6 @@
-package sharkwords;
+package sharkwords.engines;
+
+import sharkwords.GameState;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,7 +17,7 @@ import static choice.Choice.choice;
 
 /** Hangman game engine for normal game. */
 
-public class NormalHangmanEngine extends AbstractHangmanEngine {
+public class NormalEngine extends AbstractEngine {
     final private Logger logger = Logger.getLogger("NormalHangmanEngine");
 
     public static final int maxGuesses = 5;
@@ -52,10 +54,10 @@ public class NormalHangmanEngine extends AbstractHangmanEngine {
     /**
      * Choose secret answer as simple random choice of vocab.
      * <p>
-     * In versions of hangman like evil hangman, this should be overridden to
-     * update the list of candidate words.
+     * In versions of hangman like evil hangman, this will be overridden so that
+     * the selected word isn't randomly chosen.
      *
-     * @return answer
+     * @return Answer word.
      */
 
     public String chooseAnswer() {

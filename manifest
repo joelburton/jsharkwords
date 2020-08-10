@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
-Main-Class: sharkwords.frontends.ConsoleHangmanGame
+Main-Class: sharkwords.frontends.ConsoleSharkwords
 SplashScreen-Image: guess5.png
 Specification-Version: 1.1

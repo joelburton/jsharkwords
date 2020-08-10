@@ -1,4 +1,4 @@
-package sharkwords;
+package sharkwords.engines;
 
 import java.util.List;
 import java.util.Map;
@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 
 /** Nicely evil: keep their options open, but try to use their letter. */
 
-public class NicelyEvilHangmanEngine extends EvilHangmanEngine {
+public class NicelyEvilEngine extends EvilEngine {
     final private Logger logger = Logger.getLogger("NicelyEvilHangmanEngine");
 
     @Override

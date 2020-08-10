@@ -5,7 +5,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
@@ -64,9 +63,7 @@ class LetterButtons extends JPanel {
             super(label);
             setMargin(new Insets(0, 0, 0, 0));
             setPreferredSize(new Dimension(30, 30));
-            addActionListener(e -> {
-                frame.guess(label);
-            });
+            addActionListener(e -> frame.guess(label));
         }
     }
 
@@ -79,8 +76,8 @@ class LetterButtons extends JPanel {
         }
     }
 
-    SharkwordsGameFrame frame;
-    HashMap<String, LetterButton> keyMap = new HashMap<>();
+    final SharkwordsGameFrame frame;
+    final HashMap<String, LetterButton> keyMap = new HashMap<>();
 
     LetterButtons(SharkwordsGameFrame frame) {
         for (String btn : "abcdefghijklmnopqrstuvwxyz".split("")) {

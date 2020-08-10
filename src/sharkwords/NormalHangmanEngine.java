@@ -20,7 +20,9 @@ class NormalHangmanEngine extends sharkwords.HangmanEngine {
 
         Pattern legal = Pattern.compile("^[a-z]{" + lenRange + "}$");
 
-        try (Stream<String> words = Files.lines(Paths.get(DICT_PATH))) {
+        var path = getClass().getResource(DICT_PATH).getPath();
+
+        try (Stream<String> words = Files.lines(Paths.get(path))) {
             var vocabList = words
                     .filter(line -> legal.matcher(line).matches())
                     .collect(Collectors.toUnmodifiableList());

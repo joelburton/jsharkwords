@@ -47,7 +47,8 @@ class EvilHangmanEngine extends sharkwords.NormalHangmanEngine {
                     .map(c -> Objects.equals(c, guess) ? c : "-")
                     .collect(Collectors.joining());
             logger.fine("word=" + word + " key=" + key);
-            families.getOrDefault(key, new ArrayList<>()).add(word);
+            families.putIfAbsent(key, new ArrayList<>());
+            families.get(key).add(word);
         }
         return families;
     }

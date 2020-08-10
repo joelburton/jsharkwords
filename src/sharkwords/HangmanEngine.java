@@ -17,7 +17,7 @@ enum GameState {
 /** Abstract engine that all hangman engines must extend. */
 
 abstract class HangmanEngine {
-    static String DICT_PATH = "/usr/share/dict/words";
+    static String DICT_PATH = "/10000-medium.txt";
     static final int MAX_GUESSES = 5;
     static int MIN_WORD_LENGTH = 4;
     static int MAX_WORD_LENGTH = 10;

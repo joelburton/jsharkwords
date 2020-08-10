@@ -48,24 +48,33 @@ public class ConsoleHangmanGame {
                 System.out.println("Wrong!");
         }
 
-        if (engine.gameState == sharkwords.GameState.Won) {
-            System.out.printf("You win!%n");
-        } else {
-            System.out.printf("You suck -- it was %s !%n", engine.answer);
-        }
+        System.out.println((engine.gameState == sharkwords.GameState.Won)
+                ? "You win!"
+                : "You suck -- it was " + engine.answer + " !");
     }
 
     /** Command-line interface */
 
     public static void main(String[] args) throws IOException {
 
-        sharkwords.HangmanEngine engine = switch (args[0]) {
-            case "evil" -> new sharkwords.EvilHangmanEngine();
-            case "nice" -> new sharkwords.NiceHangmanEngine();
-            case "nice-evil" -> new sharkwords.NicelyEvilHangmanEngine();
-            case "normal" -> new NormalHangmanEngine();
-            default -> throw new RuntimeException("Illegal Engine");
-        };
+        HangmanEngine engine;
+
+        switch (args[0]) {
+            case "evil":
+                engine = new sharkwords.EvilHangmanEngine();
+                break;
+            case "nice":
+                engine = new sharkwords.NiceHangmanEngine();
+                break;
+            case "nice-evil":
+                engine = new sharkwords.NicelyEvilHangmanEngine();
+                break;
+            case "normal":
+                engine = new NormalHangmanEngine();
+                break;
+            default:
+                throw new RuntimeException("Illegal Engine");
+        }
 
         engine.start();
         new ConsoleHangmanGame(engine).playRound();

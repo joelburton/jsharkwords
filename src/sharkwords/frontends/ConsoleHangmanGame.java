@@ -1,4 +1,11 @@
-package sharkwords;
+package sharkwords.frontends;
+
+import sharkwords.EvilHangmanEngine;
+import sharkwords.AbstractHangmanEngine;
+import sharkwords.AbstractHangmanEngine.GameState;
+import sharkwords.NiceHangmanEngine;
+import sharkwords.NicelyEvilHangmanEngine;
+import sharkwords.NormalHangmanEngine;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -7,9 +14,9 @@ import java.util.regex.Pattern;
 /** Hangman game. */
 
 public class ConsoleHangmanGame {
-    private final sharkwords.HangmanEngine engine;
+    private final AbstractHangmanEngine engine;
 
-    private ConsoleHangmanGame(sharkwords.HangmanEngine engine) {
+    private ConsoleHangmanGame(AbstractHangmanEngine engine) {
         this.engine = engine;
     }
 
@@ -27,7 +34,7 @@ public class ConsoleHangmanGame {
         Scanner terminalInput = new Scanner(System.in);
         Pattern lettersOnly = Pattern.compile("[a-z]");
 
-        while (engine.gameState == sharkwords.GameState.Active) {
+        while (engine.gameState == GameState.Active) {
             showStatus();
             System.out.print("Guess: ");
             String s = terminalInput.nextLine();
@@ -48,7 +55,7 @@ public class ConsoleHangmanGame {
                 System.out.println("Wrong!");
         }
 
-        System.out.println((engine.gameState == sharkwords.GameState.Won)
+        System.out.println((engine.gameState == GameState.Won)
                 ? "You win!"
                 : "You suck -- it was " + engine.answer + " !");
     }
@@ -57,24 +64,13 @@ public class ConsoleHangmanGame {
 
     public static void main(String[] args) throws IOException {
 
-        HangmanEngine engine;
-
-        switch (args[0]) {
-            case "evil":
-                engine = new sharkwords.EvilHangmanEngine();
-                break;
-            case "nice":
-                engine = new sharkwords.NiceHangmanEngine();
-                break;
-            case "nice-evil":
-                engine = new sharkwords.NicelyEvilHangmanEngine();
-                break;
-            case "normal":
-                engine = new NormalHangmanEngine();
-                break;
-            default:
-                throw new RuntimeException("Illegal Engine");
-        }
+        AbstractHangmanEngine engine = switch (args[0]) {
+            case "evil" -> new EvilHangmanEngine();
+            case "nice" -> new NiceHangmanEngine();
+            case "nice-evil" -> new NicelyEvilHangmanEngine();
+            case "normal" -> new NormalHangmanEngine();
+            default -> throw new RuntimeException("Illegal Engine");
+        };
 
         engine.start();
         new ConsoleHangmanGame(engine).playRound();

@@ -21,4 +21,4 @@ There is a both a console and a GUI frontend for this.
 .. reminder
 
   to build dmg:
-   /Library/Java/JavaVirtualMachines/jdk-14.0.2.jdk/Contents/Home/bin/jpackage --main-class sharkwords.Sharkwords --main-jar sharkwords.jar --input .
+   /Library/Java/JavaVirtualMachines/jdk-14.0.2.jdk/Contents/Home/bin/jpackage --main-class sharkwords.frontends.Sharkwords --main-jar sharkwords.jar --input .

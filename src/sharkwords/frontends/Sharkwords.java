@@ -1,4 +1,7 @@
-package sharkwords;
+package sharkwords.frontends;
+
+import sharkwords.*;
+import sharkwords.AbstractHangmanEngine.GameState;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -18,7 +21,7 @@ class EngineChooserFrame extends JFrame {
 
     static class EngineButton extends JButton {
         EngineButton(String label,
-                     Class<? extends sharkwords.HangmanEngine> engineClass,
+                     Class<? extends AbstractHangmanEngine> engineClass,
                      EngineChooserFrame engineChooserFrame) {
             super(label);
             addActionListener(e -> engineChooserFrame.chooseEngine(engineClass));
@@ -46,7 +49,7 @@ class EngineChooserFrame extends JFrame {
         setSize(500, 125);
     }
 
-    void chooseEngine(Class<? extends sharkwords.HangmanEngine> engineClass) {
+    void chooseEngine(Class<? extends AbstractHangmanEngine> engineClass) {
         System.out.printf("%s%n", engineClass);
         new SharkwordsGameFrame(engineClass);
     }
@@ -127,10 +130,10 @@ class SharkwordsGameFrame extends JFrame {
     private ImagePanel image;
     private JLabel guessedWord;
     private JLabel guessesLeft;
-    private sharkwords.HangmanEngine engine;
+    private AbstractHangmanEngine engine;
     private LetterButtons letters;
 
-    SharkwordsGameFrame(Class<? extends sharkwords.HangmanEngine> engineClass) {
+    SharkwordsGameFrame(Class<? extends AbstractHangmanEngine> engineClass) {
         try {
             engine = engineClass.getDeclaredConstructor().newInstance();
         } catch (ReflectiveOperationException e) {
@@ -180,7 +183,7 @@ class SharkwordsGameFrame extends JFrame {
 
         boolean result = engine.guess(letter);
         if (!result) {
-            image.setImage(NormalHangmanEngine.MAX_GUESSES - engine.nGuessesLeft);
+            image.setImage(NormalHangmanEngine.maxGuesses - engine.nGuessesLeft);
             guessesLeft.setText("Guesses left: " + engine.nGuessesLeft);
         } else {
             guessedWord.setText(formatGuessWord());

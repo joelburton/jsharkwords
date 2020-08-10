@@ -11,23 +11,26 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static choice.Choice.choice;
+
 /** Hangman game engine for normal game. */
 
-class NormalHangmanEngine extends sharkwords.HangmanEngine {
-    Logger logger = Logger.getLogger("com.joelburton.NormalHangmanEngine");
+public class NormalHangmanEngine extends AbstractHangmanEngine {
+    final private Logger logger = Logger.getLogger("NormalHangmanEngine");
 
-    static String DICT_PATH = "/10000-medium.txt";
-    static final int MAX_GUESSES = 5;
-    static int MIN_WORD_LENGTH = 4;
-    static int MAX_WORD_LENGTH = 10;
+    public static final int maxGuesses = 5;
 
     /** Start engine: read list of vocab words, choose answer, setup guesses. */
 
-    void start() throws IOException {
-        String lenRange = MIN_WORD_LENGTH + "," + MAX_WORD_LENGTH;
-        logger.info("wordlen=" + lenRange);
+    public void start() throws IOException {
+        final int MIN_WORD_LENGTH = 4;
+        final int MAX_WORD_LENGTH = 10;
+        final String DICT_PATH = "/10000-medium.txt";
 
-        nGuessesLeft = MAX_GUESSES;
+        String lenRange = MIN_WORD_LENGTH + "," + MAX_WORD_LENGTH;
+        logger.info("word-lens=" + lenRange);
+
+        nGuessesLeft = maxGuesses;
 
         Pattern legal = Pattern.compile("^[a-z]{" + lenRange + "}$");
 
@@ -55,7 +58,7 @@ class NormalHangmanEngine extends sharkwords.HangmanEngine {
      * @return answer
      */
 
-    String chooseAnswer() {
+    public String chooseAnswer() {
         return choice(vocab);
     }
 
@@ -71,7 +74,7 @@ class NormalHangmanEngine extends sharkwords.HangmanEngine {
      * @return true if guess is correct else false
      */
 
-    boolean isGuessCorrect(String guess) {
+    public boolean isGuessCorrect(String guess) {
         return answer.contains(guess);
     }
 
@@ -82,7 +85,7 @@ class NormalHangmanEngine extends sharkwords.HangmanEngine {
      * @return was this a correct guess?
      */
 
-    boolean guess(String guess) {
+    public boolean guess(String guess) {
         boolean correct = isGuessCorrect(guess);
 
         guessed.add(guess);
@@ -91,17 +94,17 @@ class NormalHangmanEngine extends sharkwords.HangmanEngine {
             nGuessesLeft -= 1;
 
         if (guessed.containsAll(Arrays.asList(answer.split(""))))
-            gameState = sharkwords.GameState.Won;
+            gameState = GameState.Won;
 
         else if (nGuessesLeft == 0)
-            gameState = sharkwords.GameState.Lost;
+            gameState = GameState.Lost;
 
         return correct;
     }
 
     /** Return displayable guessed word (eg "a__le") */
 
-    String guessedWord() {
+    public String guessedWord() {
         return Arrays.stream(answer.split(""))
                 .map(letter -> guessed.contains(letter) ? letter : "_")
                 .collect(Collectors.joining());

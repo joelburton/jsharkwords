@@ -3,10 +3,14 @@ package sharkwords;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Logger;
+
+import static choice.Choice.choice;
 
 /** Nice engine: try to winnow candidates as quickly as possible. */
 
-class NiceHangmanEngine extends sharkwords.EvilHangmanEngine {
+public class NiceHangmanEngine extends EvilHangmanEngine {
+    final private Logger logger = Logger.getLogger("NormalHangmanEngine");
 
     /**
      * Check if guess is correct, but first update candidate words.
@@ -19,7 +23,7 @@ class NiceHangmanEngine extends sharkwords.EvilHangmanEngine {
      */
 
     @Override
-    boolean isGuessCorrect(String guess) {
+    public boolean isGuessCorrect(String guess) {
         var families = constructFamilies(guess).values();
 
         // find family with shortest word list; ex = [dog, pup, cur]

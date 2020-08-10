@@ -1,11 +1,16 @@
 package sharkwords;
 
 import java.util.*;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
+import static choice.Choice.choice;
 
 /** Evil hangman: tries to make the game as difficult as possible. */
 
-class EvilHangmanEngine extends sharkwords.NormalHangmanEngine {
+public class EvilHangmanEngine extends NormalHangmanEngine {
+    final private Logger logger = Logger.getLogger("EvilHangmanEngine");
+
     List<String> candidateAnswers;
 
     /**
@@ -19,7 +24,7 @@ class EvilHangmanEngine extends sharkwords.NormalHangmanEngine {
      */
 
     @Override
-    String chooseAnswer() {
+    public String chooseAnswer() {
         String answer = super.chooseAnswer();
 
         candidateAnswers = vocab.stream()
@@ -69,7 +74,7 @@ class EvilHangmanEngine extends sharkwords.NormalHangmanEngine {
      */
 
     @Override
-    boolean isGuessCorrect(String guess) {
+    public boolean isGuessCorrect(String guess) {
         Collection<List<String>> families = constructFamilies(guess).values();
 
         // find the family with the longest list of words; in the example above,

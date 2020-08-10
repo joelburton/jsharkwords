@@ -1,7 +1,7 @@
 package sharkwords;
 
-/** A pointlessly simple engine. */
+/* A pointlessly simple engine. */
 
-class DumbHangmanEngine extends sharkwords.NormalHangmanEngine {
-
-}
+//public class DumbHangmanEngine extends NormalHangmanEngine {
+//
+//}

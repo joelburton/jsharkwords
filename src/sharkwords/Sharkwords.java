@@ -43,7 +43,7 @@ class EngineChooserFrame extends JFrame {
                 JLabel.CENTER));
         add(engines);
 
-        setSize(425, 125);
+        setSize(500, 125);
     }
 
     void chooseEngine(Class<? extends sharkwords.HangmanEngine> engineClass) {
@@ -180,7 +180,7 @@ class SharkwordsGameFrame extends JFrame {
 
         boolean result = engine.guess(letter);
         if (!result) {
-            image.setImage(HangmanEngine.MAX_GUESSES - engine.nGuessesLeft);
+            image.setImage(NormalHangmanEngine.MAX_GUESSES - engine.nGuessesLeft);
             guessesLeft.setText("Guesses left: " + engine.nGuessesLeft);
         } else {
             guessedWord.setText(formatGuessWord());

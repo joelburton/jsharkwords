@@ -17,28 +17,46 @@ enum GameState {
 /** Abstract engine that all hangman engines must extend. */
 
 abstract class HangmanEngine {
-    static String DICT_PATH = "/10000-medium.txt";
-    static final int MAX_GUESSES = 5;
-    static int MIN_WORD_LENGTH = 4;
-    static int MAX_WORD_LENGTH = 10;
-
-    final Logger logger = Logger.getLogger("com.joelburton.HangmanEngine");
+    /** The list of words in the game vocabulary. */
 
     ArrayList<String> vocab;
+
+    /** The secret answer word. */
+
     String answer;
+
+    /** Set of letters that have been guessed so far. */
+
     Set<String> guessed;
-    int nGuessesLeft = MAX_GUESSES;
+
+    /** Number of guesses left until game lost. */
+
+    int nGuessesLeft;
+
+    /** State of game: .Active, .Won, or .Lost */
+
     GameState gameState = GameState.Active;
+
+    /** Start the game: reading any dictionary files, do any setup. */
 
     abstract void start() throws IOException;
 
+    /** Choose the secret answer using any method the engine chooses. */
+
     abstract String chooseAnswer();
+
+    /** Is the guessed-letter in the answer? */
 
     abstract boolean isGuessCorrect(String guess);
 
+    /** Player makes a guess: determine if game is won/lost. */
+
     abstract boolean guess(String guess);
 
+    /** Return the active-guessed partially-completed answer */
+
     abstract String guessedWord();
+
 
     /**
      * Choose random item from collection.

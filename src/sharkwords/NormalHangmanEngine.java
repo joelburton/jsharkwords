@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.TreeSet;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -13,10 +14,20 @@ import java.util.stream.Stream;
 /** Hangman game engine for normal game. */
 
 class NormalHangmanEngine extends sharkwords.HangmanEngine {
+    Logger logger = Logger.getLogger("com.joelburton.NormalHangmanEngine");
+
+    static String DICT_PATH = "/10000-medium.txt";
+    static final int MAX_GUESSES = 5;
+    static int MIN_WORD_LENGTH = 4;
+    static int MAX_WORD_LENGTH = 10;
+
+    /** Start engine: read list of vocab words, choose answer, setup guesses. */
 
     void start() throws IOException {
         String lenRange = MIN_WORD_LENGTH + "," + MAX_WORD_LENGTH;
         logger.info("wordlen=" + lenRange);
+
+        nGuessesLeft = MAX_GUESSES;
 
         Pattern legal = Pattern.compile("^[a-z]{" + lenRange + "}$");
 
@@ -36,7 +47,7 @@ class NormalHangmanEngine extends sharkwords.HangmanEngine {
     }
 
     /**
-     * Choose secret answer.
+     * Choose secret answer as simple random choice of vocab.
      * <p>
      * In versions of hangman like evil hangman, this should be overridden to
      * update the list of candidate words.
@@ -49,7 +60,7 @@ class NormalHangmanEngine extends sharkwords.HangmanEngine {
     }
 
     /**
-     * Check if guess is correct.
+     * Check if guess is correct: is letter in answer?
      * <p>
      * This is a trivial check in friendly hangman, but having this as a
      * separate method makes it easier to subclass this for different variants

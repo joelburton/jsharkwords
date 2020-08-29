@@ -8,6 +8,7 @@ import static choice.Choice.choice;
 
 /** Evil hangman: tries to make the game as difficult as possible. */
 
+@Registration.RegistersEngine(name = "evil")
 public class EvilEngine extends NormalEngine {
     final private Logger logger = Logger.getLogger("EvilHangmanEngine");
 

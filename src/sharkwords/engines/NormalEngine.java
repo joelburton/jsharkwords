@@ -17,6 +17,7 @@ import static choice.Choice.choice;
 
 /** Hangman game engine for normal game. */
 
+@Registration.RegistersEngine(name = "normal")
 public class NormalEngine extends AbstractEngine {
     final private Logger logger = Logger.getLogger("NormalHangmanEngine");
 

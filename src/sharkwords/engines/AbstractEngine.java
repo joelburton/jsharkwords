@@ -9,7 +9,6 @@ import java.util.Set;
 
 /** Abstract engine that all hangman engines must extend. */
 
-@SuppressWarnings("unused")
 public abstract class AbstractEngine {
 
     /** The name of the engine. */

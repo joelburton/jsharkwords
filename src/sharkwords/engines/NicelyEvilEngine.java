@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 /** Nicely evil: keep their options open, but try to use their letter. */
 
+@Registration.RegistersEngine(name = "nicely-evil")
 public class NicelyEvilEngine extends EvilEngine {
     final private Logger logger = Logger.getLogger("NicelyEvilHangmanEngine");
 

@@ -1,9 +1,11 @@
 package sharkwords.frontends;
 
-import sharkwords.*;
-import sharkwords.engines.*;
+import sharkwords.GameState;
+import sharkwords.engines.AbstractEngine;
+import sharkwords.engines.Registration;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -15,6 +17,8 @@ class InvalidEngineError extends RuntimeException {
  */
 
 public class ConsoleSharkwords {
+    private static final Map<String, Class<? extends AbstractEngine>> engineList =
+            Registration.getEngines();
     private final AbstractEngine engine;
 
     private ConsoleSharkwords(AbstractEngine engine) {
@@ -74,7 +78,11 @@ public class ConsoleSharkwords {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            System.out.println("Choose: evil nice nice-evil normal: ");
+            System.out.print("Choose: ");
+            for (String name : engineList.keySet()) {
+                System.out.print(name + " ");
+            }
+            System.out.print(": ");
             String name = scanner.nextLine();
             try {
                 return selectEngine(name);
@@ -89,13 +97,15 @@ public class ConsoleSharkwords {
      */
 
     private static AbstractEngine selectEngine(String name) {
-        return switch (name) {
-            case "evil" -> new EvilEngine();
-            case "nice" -> new NiceEngine();
-            case "nice-evil" -> new NicelyEvilEngine();
-            case "normal" -> new NormalEngine();
-            default -> throw new InvalidEngineError();
-        };
+        for (String key : engineList.keySet()) {
+            try {
+                if (name.equals(key))
+                    return engineList.get(key).getConstructor().newInstance();
+            } catch (ReflectiveOperationException err) {
+                throw new InvalidEngineError();
+            }
+        }
+        throw new InvalidEngineError();
     }
 
     /**

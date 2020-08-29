@@ -1,7 +1,9 @@
 package sharkwords.frontends;
 
-import sharkwords.*;
-import sharkwords.engines.*;
+import sharkwords.GameState;
+import sharkwords.engines.AbstractEngine;
+import sharkwords.engines.NormalEngine;
+import sharkwords.engines.Registration;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -31,16 +33,10 @@ class EngineChooserFrame extends JFrame {
     EngineChooserFrame() {
         JPanel engines = new JPanel();
 
-        engines.add(new EngineButton(
-                "Boring", BoringEngine.class, this));
-        engines.add(new EngineButton(
-                "Normal", NormalEngine.class, this));
-        engines.add(new EngineButton(
-                "Evil", EvilEngine.class, this));
-        engines.add(new EngineButton(
-                "Nice", NiceEngine.class, this));
-        engines.add(new EngineButton(
-                "Nicely-Evil", NicelyEvilEngine.class, this));
+        var engineClasses = Registration.getEngines();
+        for (String key : engineClasses.keySet()) {
+            engines.add(new EngineButton(key, engineClasses.get(key), this));
+        }
 
         setLayout(new GridLayout(2, 1));
         add(new JLabel(

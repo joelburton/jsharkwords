@@ -9,6 +9,7 @@ import static choice.Choice.choice;
 
 /** Nice engine: try to winnow candidates as quickly as possible. */
 
+@Registration.RegistersEngine(name = "nice")
 public class NiceEngine extends EvilEngine {
     final private Logger logger = Logger.getLogger("NormalHangmanEngine");
 
